@@ -1,0 +1,222 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+
+class Matrix {
+    int row, col;
+    double** matx;
+
+public:
+    Matrix(int r, int c) {
+        this->row = r;
+        this->col = c;
+
+
+        this->matx = new double* [row];
+        for (int i = 0; i < row; i++) {
+            this->matx[i] = new double[col];
+        }
+
+        for (int i = 0; i < this->row; i++) {
+            for (int j = 0; j < this->col; j++) {
+                this->matx[i][j] = 0;
+            }
+        }
+
+    }
+
+    int GetR() {
+        return row;
+    }
+    int GetC() {
+        return col;
+    }
+    double GetM(int i, int j) {
+        return this->matx[i][j];
+    }
+
+    Matrix(Matrix& m) { //copy constructor
+        row = m.GetR();
+        col = m.GetC();
+
+        this->matx = new double* [row];
+        for (int i = 0; i < row; i++) {
+            this->matx[i] = new double[col];
+        }
+
+        for (int i = 0; i < this->row; i++) {
+            for (int j = 0; j < this->col; j++) {
+                this->matx[i][j] = m.GetM(i,j);
+            }
+        }
+    }
+
+    Matrix(int r,int c, int in) { //conversion
+        this->row = r;
+        this->col = c;
+        if (this->matx != NULL) delete[] & this->matx;
+        this->matx = new double* [row];
+        for (int i = 0; i < row; i++) {
+            this->matx[i] = new double[col];
+        }
+        
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                this->matx[i][j] = in;
+            }
+        }
+
+
+    }
+
+   
+    void fill(int max) {
+        for (int i = 0; i < this->row; i++) {
+            for (int j = 0; j < this->col; j++) {
+                this->matx[i][j] = rand() % max;
+            }
+        }
+    }
+    
+
+    Matrix& operator=(Matrix& m) {
+        Matrix a(m);
+        return a;
+    }
+
+   
+    Matrix& operator-() {
+        Matrix temp(this->row, this->col);
+
+        for (int i = 0; i < this->row; i++) {
+            for (int j = 0; j < this->col; j++) {
+                temp.matx[i][j] = (-1)*this->matx[i][j];
+            }
+        }
+        return temp;
+    }
+
+    Matrix operator+(Matrix a) const {
+        Matrix m(a);
+        for (int i = 0; i < a.row; i++) {
+            for (int j = 0; j < a.col; j++) {
+                m[i][j]=this->matx[i][j] + a.matx[i][j];
+            }
+            cout << endl;
+        }
+        return m;
+    }
+    
+    Matrix operator-(Matrix a) const {
+        Matrix m(a);
+        for (int i = 0; i < a.row; i++) {
+            for (int j = 0; j < a.col; j++) {
+                m[i][j] = this->matx[i][j] - a.matx[i][j];
+            }
+            cout << endl;
+        }
+        return m;
+    }
+
+    Matrix operator*(Matrix a) const {
+        Matrix m(a);
+        for (int i = 0; i < a.row; i++) {
+            for (int j = 0; j < a.col; j++) {
+                m[i][j] = this->matx[i][j] * a.matx[i][j];
+            }
+            cout << endl;
+        }
+        return m;
+    }
+
+    Matrix operator/(Matrix a) const {
+        Matrix m(a);
+        for (int i = 0; i < a.row; i++) {
+            for (int j = 0; j < a.col; j++) {
+                m[i][j] = this->matx[i][j] / a.matx[i][j];
+            }
+            cout << endl;
+        }
+        return m;
+    }
+
+    double* operator[](int i) const { 
+        return matx[i];
+    }
+
+    friend ostream& operator<<(ostream& out, Matrix& a);
+
+
+};
+
+ostream& operator<<(ostream& out, Matrix& a) {
+    for (int i = 0; i < a.row; i++) {
+        for (int j = 0; j < a.col; j++) {
+            out << a.matx[i][j] << " ";
+        }
+        printf("\n");
+    }
+    return out;
+}
+
+Matrix operator+ (Matrix m, double x) {
+    Matrix a(m);
+
+    for (int i = 0; i < m.GetR(); i++) {
+        for (int j = 0; j < m.GetC(); i++) {
+            a[i][j] = m[i][j] + x;
+        }
+    }
+
+    return a;
+}
+
+Matrix operator- (Matrix m, double x) { 
+    Matrix a(m);
+
+    for (int i = 0; i < m.GetR(); i++) {
+        for (int j = 0; j < m.GetC(); i++) {
+            a[i][j] = m[i][j] - x;
+        }
+    }
+
+    return a;
+}
+
+Matrix operator* (Matrix m, double x) { 
+    Matrix a(m);
+
+    for (int i = 0; i < m.GetR(); i++) {
+        for (int j = 0; j < m.GetC(); i++) {
+            a[i][j] = m[i][j] * x;
+        }
+    }
+
+    return a;
+}
+
+Matrix operator/ (Matrix m, double x) {
+    Matrix a(m);
+
+    for (int i = 0; i < m.GetR(); i++) {
+        for (int j = 0; j < m.GetC(); i++) {
+            a[i][j] = m[i][j] / x;
+        }
+    }
+
+    return a;
+}
+
+
+int main()
+{
+    Matrix A(3, 4), B(3, 4), C(3, 4);
+    A.fill(20);
+    A.fill(20);
+    B.fill(20);
+    C.fill(20);
+
+   C = -A + B + 3 + B[1][2];
+    cout << A << endl << B << endl << C << endl;
+}   

@@ -1,0 +1,112 @@
+#include <iostream>
+#include <stdlib.h>
+#include<stdio.h>
+#include <time.h>
+using namespace std;
+
+template <typename T> class Array {
+private:
+    int length;
+    T* arr;
+
+public:
+    Array(int len) {
+        this->length = len;
+        arr = new T[len];
+    }
+    ~Array() {
+        delete[] arr;
+    }
+
+    void setArr(int idx, T data) {
+        this->arr[idx] = data;
+    }
+
+    T operator[](int i) const {
+        return arr[i];
+    }
+
+    /*
+    Array& operator=(T data) {
+        setArr(i, data);
+    }*/
+
+
+    friend ostream& operator<<(ostream& out, Array& a);
+
+};
+
+
+template <typename T>
+ostream& operator<<(ostream& out, Array<T>& a) {
+    for (int i = 0; i < a.length; i++) {
+        out << a.arr[i] << " ";
+    }
+
+}
+
+class Person {
+private:
+    int ID;
+    string name;
+    string surname;
+    int phone;
+
+public:
+
+    Person() {
+        ID = 0;
+        name = "";
+        surname = "";
+        phone = 0;
+    }
+
+    void setID(int i) {
+        this->ID = i;
+    }
+    void setName(string s) {
+        this->name = s;
+    }
+    void setSurname(string s) {
+        this->surname = s;
+    }
+    void setPhone(int i) {
+        this->phone = i;
+    }
+
+    friend ostream& operator<<(ostream& out, Person& p);
+
+
+};
+
+ostream& operator<<(ostream& out, Person& p) {
+    out << "ID : " << p.ID << endl;
+    out << "Name : " << p.name << endl;
+    out << "Surname : " << p.surname << endl;
+    out << "Phone : " << p.phone << endl;
+
+    return out;
+}
+
+
+
+int main() {
+    Array<int> A(8);
+    Array<Person> B(8);
+    string names[8] = { "John","Oliver","Jack","Jacob", "William","James","Daniel","Charlie" };
+    string surnames[8] = { "Smith","Jones", "Brown", "Taylor", "Murphy", "Walsh","Ryan", "Anderson" };
+
+
+    for (int i = 0; i < 8; i++) {
+        A[i] = i + 1; // A.setArr(i, i + 1); 
+        B[i].setID(i + 1);
+        B[i].setName(names[rand() % 8]);
+        B[i].setSurname(surnames[rand() % 8]); //there is a error on task file. rand() % 10 should be corrected like this. because array name and surname has only 8 elements.
+        B[i].setPhone(1000 + rand() % 9000);
+    }
+
+    cout << A << endl << B << endl;
+
+
+    return 0;
+};

@@ -1,0 +1,109 @@
+#include <iostream>
+using namespace std;
+
+template <typename T> class LIPO {
+private:
+    int depth;
+    int po;
+    T* stack;
+public:
+    LIPO(int dep) {
+        this->depth = dep;
+        stack = new T[this->depth];
+        po = 0;
+    }
+    ~LIPO() {
+        delete[] stack;
+    }
+
+    void show() {
+        for (int i = 0; i < po; i++) {
+            cout << stack[i] << " ";
+        }
+        printf("\n");
+    }
+
+    void pop() {
+        if (po == 0) {
+            printf("Stack is empty\n");
+
+        }
+        else {
+            cout << "Remove " << stack[po - 1] << endl;
+            po--;
+
+        }
+    }
+    void push(T data) {
+        if (po <= this->depth) {
+            stack[po] = data;
+            po++;
+        }
+        else {
+            printf("Stack is full");
+
+        }
+    }
+};
+
+template <typename G>
+void RunStack(LIPO<G> mystack) {
+    while (true) {
+        int m;
+        G data;
+        cout << "\n" << "-----menu-----\n" << "     0.exit\n" << "     1.push\n" << "     2.pop\n" << "     3.show" << endl;
+        cout << "Select menu : ";
+        cin >> m;
+
+        switch (m) {
+        case 0:
+            break;
+        case  1:
+            cout << "Input data : ";
+            cin >> data;
+            mystack.push(data);
+            break;
+        case 2:
+            mystack.pop();
+            break;
+        case 3:
+            mystack.show();
+            break;
+        }
+
+        if (m == 0) break;
+    }
+
+}
+
+
+int main()
+{
+    int datatype;
+    int dep;
+
+    cout << "Input the stack depth : ";
+    cin >> dep;
+    cout << endl;
+
+    cout << "Choose the data type \n" << "1.int\n" << "2.char\n" << "3.double" << endl;
+    cin >> datatype;
+    cout << endl;
+
+    switch (datatype) {
+    case 1:
+    {LIPO <int> mstack(dep);
+    RunStack(mstack);
+    break; }
+    case 2:
+    { LIPO <char> mstack(dep);
+    RunStack(mstack);
+    break; }
+    case 3:
+    { LIPO <double> mstack(dep);
+    RunStack(mstack);
+    break; }
+
+    }
+
+}
